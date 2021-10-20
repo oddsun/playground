@@ -10,3 +10,6 @@ class A:
     def __post_init__(self, config: dict):
         if config:
             self.__init__(**config)
+
+
+assert A(a='no', config={'a': 'hi', 'b': 1, 'config': {'a': 'ohmy'}}) == A(a='ohmy', b=0)
