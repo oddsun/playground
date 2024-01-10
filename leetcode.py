@@ -12,6 +12,26 @@
 #         self.next = next
 class Solution2:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        You are given two non-empty linked lists representing two non-negative integers. 
+        The digits are stored in reverse order, and each of their nodes contains a single digit. 
+        Add the two numbers and return the sum as a linked list.
+        """
+        carry = 0
+        head = ListNode()
+        curr = head
+        while l1 or l2 or carry:
+            curr.next = ListNode()
+            curr = curr.next
+            if l1:
+                carry += l1.val
+                l1 = l1.next
+            if l2:
+                carry += l2.val 
+                l2 = l2.next
+            curr.val = carry % 10
+            carry //= 10
+        return head.next
         
         
 class Solution:
