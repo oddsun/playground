@@ -8,19 +8,19 @@ T = TypeVar('T')
 
 
 class BetterList(List[T]):
-    """ hi """
+    """A custom list subclass that provides additional functionality."""
 
     def __init__(self, *args: T):
         super().__init__(args)
 
 
 class IntList(BetterList[int]):
-    """ hi """
+    """A custom list subclass specifically for integers."""
     pass
 
 
 class StrList(BetterList[str]):
-    """ hi """
+    """A custom list subclass specifically for strings."""
     pass
 
 
