@@ -21,16 +21,18 @@ class Solution2:
         head = ListNode()
         curr = head
         while l1 or l2 or carry:
-            curr.next = ListNode()
-            curr = curr.next
+            val = carry
             if l1:
-                carry += l1.val
+                val += l1.val
                 l1 = l1.next
             if l2:
-                carry += l2.val 
+                val += l2.val
                 l2 = l2.next
-            curr.val = carry % 10
-            carry //= 10
+            
+            carry = val // 10
+            val = val % 10
+            curr.next = ListNode(val)
+            curr = curr.next
         return head.next
         
         
@@ -48,3 +50,4 @@ class Solution:
                 return [root.val]
             return get_leaf_sequence(root.left) + get_leaf_sequence(root.right)
         return get_leaf_sequence(root1) == get_leaf_sequence(root2)
+    

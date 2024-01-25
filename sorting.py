@@ -1,16 +1,18 @@
 
 def bubble_sort(array):
     """
-    Sorts the given array using the bubble sort algorithm.
+    Sorts the given array using the Bubble Sort algorithm.
 
-    Bubble sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.
-    This process is repeated for each element in the array until the entire array is sorted.
+    Bubble Sort is a simple sorting algorithm that repeatedly steps through the list,
+    compares adjacent elements and swaps them if they are in the wrong order.
+    The pass through the list is repeated until the list is sorted.
 
     Args:
-        array (list): The unsorted array.
+        array (list): The array to be sorted.
 
     Returns:
         list: The sorted array.
+
     """
     for i in range(len(array)):
         for j in range(len(array) - 1, i, -1):
@@ -171,7 +173,7 @@ def radix_sort(array):
     return array
 
 
-def factor_prime(n):
+def factor_prime(n):    
     """
     Returns a list of prime factors of a given number.
 
@@ -242,4 +244,78 @@ def prime_sieve(n):
     return [i for i in range(2, n + 1) if prime[i]]
 
 
-def distributed_prime_factor()
+def distributed_prime_factor():
+    """
+    finds prime factor using multiprocessing
+    """
+    def worker(num, out_q):
+        """worker function"""
+        outdict = {}
+        outdict[num] = factor_prime(num)
+        out_q.put(outdict)
+
+    def listener(out_q):
+        """listens for messages on the out_q, writes to file. """
+        f = open("prime_factors.txt", "w")
+        while 1:
+            m = out_q.get()
+            if m == 'kill':
+                break
+            f.write(str(m) + '\n')
+            f.flush()
+        f.close()
+
+    # must use Manager queue here, or will not work
+    manager = multiprocessing.Manager()
+    out_q = manager.Queue()
+    pool = multiprocessing.Pool(multiprocessing.cpu_count() + 2)
+
+    # put listener to work first
+    watcher = pool.apply_async(listener, (out_q,))
+
+    # fire off workers
+    jobs = []
+    for i in range(1000000, 1000100):
+        job = pool.apply_async(worker, (i, out_q))
+        jobs.append(job)
+
+    # collect results from the workers through the pool result queue
+    for job in jobs:
+        job.get()
+
+    # now we are done, kill the listener
+    out_q.put('kill')
+    pool.close()
+    pool.join()
+
+
+def insertion_sort(array):
+    """
+    Sorts an array in ascending order using the insertion sort algorithm.
+
+    Args:
+        array (list): The array to be sorted.
+
+    Returns:
+        None. The array is sorted in-place.
+
+    Algorithm:
+        The insertion sort algorithm works by dividing the array into two parts:
+        a sorted subarray and an unsorted subarray. Initially, the sorted subarray
+        contains only the first element of the array. The algorithm then iterates
+        through the unsorted subarray, comparing each element with the elements in
+        the sorted subarray and inserting it at the correct position. This process
+        is repeated until the entire array is sorted.
+
+    Complexity Analysis:
+        - Time Complexity: O(n^2) in the worst case, where n is the length of the array.
+        - Space Complexity: O(1) as the sorting is done in-place.
+    """
+    for i in range(1, len(array)):
+        key = array[i]
+        j = i - 1
+        while j >= 0 and array[j] > key:
+            array[j + 1] = array[j]
+            j -= 1
+        array[j + 1] = key
+    

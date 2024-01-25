@@ -58,3 +58,12 @@ void arraylist_clear(ArrayList *list){
     list->size = 0;
 }
 
+bool arraylist_contains(ArrayList *list, void *el, int(*cmp)(void *, void *)){
+    for(size_t i = 0; i < list->size; i++){
+        void *el_in_list = arraylist_get(list, i);
+        if(cmp(el_in_list, el) == 0){
+            return true;
+        }
+    }
+    return false;
+}
